@@ -18,21 +18,27 @@
                 <p class="section-title">PREVISUALIZACIÓN</p>
             </div>
             <div class="preview-wrapper">
-                 <div id="preview-box" class="contour-preview">
-                     <div class="handle handle-tl" data-handle-advanced="tlh" style="cursor: ew-resize;"></div>
-                     <div class="handle handle-tl" data-handle-advanced="tlv" style="cursor: ns-resize;"></div>
-                     <div class="handle handle-tr" data-handle-advanced="trh" style="cursor: ew-resize;"></div>
-                     <div class="handle handle-tr" data-handle-advanced="trv" style="cursor: ns-resize;"></div>
-                     <div class="handle handle-br" data-handle-advanced="brh" style="cursor: ew-resize;"></div>
-                     <div class="handle handle-br" data-handle-advanced="brv" style="cursor: ns-resize;"></div>
-                     <div class="handle handle-bl" data-handle-advanced="blh" style="cursor: ew-resize;"></div>
-                     <div class="handle handle-bl" data-handle-advanced="blv" style="cursor: ns-resize;"></div>
+                 <div id="preview-box" class="contour-preview"></div>
+                 
+                 <!-- Overlay para los handles - FUERA del preview-box -->
+                 <div class="handles-overlay">
+                     <!-- Handles para modo avanzado (8 handles) -->
+                     <div class="handle" data-handle-advanced="tlh"></div>
+                     <div class="handle" data-handle-advanced="tlv"></div>
+                     <div class="handle" data-handle-advanced="trh"></div>
+                     <div class="handle" data-handle-advanced="trv"></div>
+                     <div class="handle" data-handle-advanced="brh"></div>
+                     <div class="handle" data-handle-advanced="brv"></div>
+                     <div class="handle" data-handle-advanced="blh"></div>
+                     <div class="handle" data-handle-advanced="blv"></div>
                      
-                     <div class="handle" data-handle-simple="top" style="cursor: ew-resize;"></div>
-                     <div class="handle" data-handle-simple="bottom" data-mode-simple="bottom" style="cursor: ew-resize;"></div>
-                     <div class="handle" data-handle-simple="left" data-mode-simple="left" style="cursor: ns-resize;"></div>
-                     <div class="handle" data-handle-simple="right" data-mode-simple="right" style="cursor: ns-resize;"></div>
+                     <!-- Handles para modo simple (4 handles) -->
+                     <div class="handle" data-handle-simple="top"></div>
+                     <div class="handle" data-handle-simple="bottom"></div>
+                     <div class="handle" data-handle-simple="left"></div>
+                     <div class="handle" data-handle-simple="right"></div>
                  </div>
+                 
                  <div id="contour-visualizer-overlay"></div>
             </div>
         </div>

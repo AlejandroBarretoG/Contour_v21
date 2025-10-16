@@ -450,7 +450,7 @@ input[type="range"]:focus {
     box-sizing: border-box; 
     transition: border-radius 0.3s, clip-path 0.3s, corner-shape 0.3s;
 }
-#contour-preview { /* FIX para el ID, aunque usamos contour-preview como clase en el HTML */
+#preview-box { /* FIX para el ID, aunque usamos contour-preview como clase en el HTML */
     width: 100%;
     height: 100%; 
     background-color: var(--purple);
@@ -526,7 +526,10 @@ input[type="range"]:focus {
     background-color: var(--active-blue);
     border: 2px solid white;
     border-radius: 50%;
-    transform: translate(-50%, -50%);
+    /* Corrección: Reemplazamos transform con margin para un centrado más robusto */
+    /* El tamaño total es 16px (12px + 2*2px), por lo que el margen de centrado es -8px */
+    margin: -8px 0 0 -8px; 
+    /* Eliminamos la línea "transform: translate(-50%, -50%);" */
     pointer-events: all;
     cursor: grab;
     z-index: 10;
@@ -537,4 +540,71 @@ input[type="range"]:focus {
 .handle:hover {
     background-color: white;
     border-color: var(--active-blue);
+}
+
+/* --- ESTILOS PARA HANDLES CORREGIDOS --- */
+.handle {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background-color: var(--active-blue);
+    border: 2px solid white;
+    border-radius: 50%;
+    pointer-events: all;
+    cursor: grab;
+    z-index: 10;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+    transition: background-color 0.1s;
+    display: none; /* Ocultos por defecto */
+}
+
+.handle:hover {
+    background-color: white;
+    border-color: var(--active-blue);
+    transform: scale(1.2);
+}
+
+.handle:active {
+    cursor: grabbing;
+}
+
+/* Handles para modo avanzado */
+[data-handle-advanced] {
+    display: none;
+}
+
+/* Handles para modo simple */
+[data-handle-simple] {
+    display: none;
+}
+
+/* Mostrar handles según el modo del body */
+body.mode-advanced [data-handle-advanced] {
+    display: block;
+}
+
+body.mode-simple [data-handle-simple] {
+    display: block;
+}
+
+/* Posiciones específicas para handles */
+[data-handle-advanced="tlh"],
+[data-handle-advanced="trh"],
+[data-handle-simple="top"],
+[data-handle-simple="bottom"] {
+    cursor: ew-resize;
+}
+
+[data-handle-advanced="tlv"],
+[data-handle-advanced="trv"],
+[data-handle-advanced="blv"],
+[data-handle-advanced="brv"],
+[data-handle-simple="left"],
+[data-handle-simple="right"] {
+    cursor: ns-resize;
+}
+
+/* Asegurar que el contenedor de preview sea relativo */
+.preview-wrapper {
+    position: relative;
 }

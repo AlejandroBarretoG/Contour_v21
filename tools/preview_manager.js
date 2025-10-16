@@ -31,57 +31,83 @@
         }
 
         updateHandlePositions(state) {
-            this.dom.handles.advanced.forEach(h => h.classList.remove('visible'));
-            this.dom.handles.simple.forEach(h => h.classList.remove('visible'));
+            // Ocultar todos los handles primero
+            this.dom.handles.advanced.forEach(h => h.style.display = 'none');
+            this.dom.handles.simple.forEach(h => h.style.display = 'none');
             
             const resetStyles = (h) => {
                 h.style.left = h.style.right = h.style.top = h.style.bottom = 'auto';
             };
 
-
             if (state.mode === 'advanced') {
                 const { radii } = state;
-                const advHandles = {};
+                
+                // Mostrar y posicionar handles avanzados
                 this.dom.handles.advanced.forEach(h => {
-                    advHandles[h.dataset.handleAdvanced] = h;
-                    h.classList.add('visible');
+                    h.style.display = 'block';
                     resetStyles(h);
                 });
 
-                // Lógica de posicionamiento de handles avanzada (8 puntos)
-                advHandles.tlh.style.left = `${radii.tlh}%`; advHandles.tlh.style.top = `0%`;
-                advHandles.tlv.style.top = `${radii.tlv}%`; advHandles.tlv.style.left = `0%`;
+                // Posicionamiento de handles avanzados (8 puntos)
+                document.querySelector('[data-handle-advanced="tlh"]').style.left = `${radii.tlh}%`;
+                document.querySelector('[data-handle-advanced="tlh"]').style.top = '0%';
                 
-                advHandles.trh.style.right = `${radii.trh}%`; advHandles.trh.style.top = `0%`;
-                advHandles.trv.style.top = `${radii.trv}%`; advHandles.trv.style.right = `0%`;
-
-                advHandles.brh.style.right = `${radii.brh}%`; advHandles.brh.style.bottom = `0%`;
-                advHandles.brv.style.bottom = `${radii.brv}%`; advHandles.brv.style.right = `0%`;
-
-                advHandles.blh.style.left = `${radii.blh}%`; advHandles.blh.style.bottom = `0%`;
-                advHandles.blv.style.bottom = `${radii.blv}%`; advHandles.blv.style.left = `0%`;
+                document.querySelector('[data-handle-advanced="tlv"]').style.top = `${radii.tlv}%`;
+                document.querySelector('[data-handle-advanced="tlv"]').style.left = '0%';
+                
+                document.querySelector('[data-handle-advanced="trh"]').style.right = `${radii.trh}%`;
+                document.querySelector('[data-handle-advanced="trh"]').style.top = '0%';
+                
+                document.querySelector('[data-handle-advanced="trv"]').style.top = `${radii.trv}%`;
+                document.querySelector('[data-handle-advanced="trv"]').style.right = '0%';
+                
+                document.querySelector('[data-handle-advanced="brh"]').style.right = `${radii.brh}%`;
+                document.querySelector('[data-handle-advanced="brh"]').style.bottom = '0%';
+                
+                document.querySelector('[data-handle-advanced="brv"]').style.bottom = `${radii.brv}%`;
+                document.querySelector('[data-handle-advanced="brv"]').style.right = '0%';
+                
+                document.querySelector('[data-handle-advanced="blh"]').style.left = `${radii.blh}%`;
+                document.querySelector('[data-handle-advanced="blh"]').style.bottom = '0%';
+                
+                document.querySelector('[data-handle-advanced="blv"]').style.bottom = `${radii.blv}%`;
+                document.querySelector('[data-handle-advanced="blv"]').style.left = '0%';
 
             } else { // mode === 'simple'
                 const { simpleRadii } = state;
-                const simpHandles = {};
+                
+                // Mostrar y posicionar handles simples
                 this.dom.handles.simple.forEach(h => {
-                    simpHandles[h.dataset.handleSimple] = h;
-                    h.classList.add('visible');
+                    h.style.display = 'block';
                     resetStyles(h);
                 });
                 
-                // Lógica de posicionamiento de handles simple (4 puntos)
-                simpHandles.top.style.left = `${simpleRadii.top}%`; simpHandles.top.style.top = '0%';
-                simpHandles.bottom.style.left = `${simpleRadii.bottom}%`; simpHandles.bottom.style.bottom = '0%';
-                simpHandles.left.style.top = `${simpleRadii.left}%`; simpHandles.left.style.left = '0%';
-                simpHandles.right.style.top = `${simpleRadii.right}%`; simpHandles.right.style.right = '0%';
+                // Posicionamiento de handles simples (4 puntos)
+                document.querySelector('[data-handle-simple="top"]').style.left = `${simpleRadii.top}%`;
+                document.querySelector('[data-handle-simple="top"]').style.top = '0%';
+                
+                document.querySelector('[data-handle-simple="bottom"]').style.left = `${simpleRadii.bottom}%`;
+                document.querySelector('[data-handle-simple="bottom"]').style.bottom = '0%';
+                
+                document.querySelector('[data-handle-simple="left"]').style.top = `${simpleRadii.left}%`;
+                document.querySelector('[data-handle-simple="left"]').style.left = '0%';
+                
+                document.querySelector('[data-handle-simple="right"]').style.top = `${simpleRadii.right}%`;
+                document.querySelector('[data-handle-simple="right"]').style.right = '0%';
             }
         }
         
-        // ... (El resto de la lógica de arrastre (_startDrag, _drag, _stopDrag) es idéntica a la versión modular anterior y no requiere cambios) ...
         _initEventListeners() {
-            this.dom.previewBox.addEventListener('mousedown', (e) => this._startDrag(e));
-            this.dom.previewBox.addEventListener('touchstart', (e) => this._startDrag(e));
+            // Agregar event listeners a todos los handles
+            this.dom.handles.advanced.forEach(handle => {
+                handle.addEventListener('mousedown', (e) => this._startDrag(e));
+                handle.addEventListener('touchstart', (e) => this._startDrag(e));
+            });
+            
+            this.dom.handles.simple.forEach(handle => {
+                handle.addEventListener('mousedown', (e) => this._startDrag(e));
+                handle.addEventListener('touchstart', (e) => this._startDrag(e));
+            });
 
             document.getElementById('copy-button').addEventListener('click', () => {
                 const cssOutput = document.getElementById('css-output');
@@ -100,6 +126,7 @@
             document.addEventListener('touchmove', this._drag, { passive: false });
             document.addEventListener('mouseup', this._stopDrag);
             document.addEventListener('touchend', this._stopDrag);
+            e.preventDefault();
         }
         
         _drag = (e) => {
