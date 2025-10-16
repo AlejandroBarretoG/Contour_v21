@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Border Radius Generator (Contour Style)</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body class="mode-advanced">
+
+    <div class="gradient-generator contour-generator"> 
+        <header>
+             <h1 class="section-title" style="text-align: center; margin-bottom: 20px;">Border Radius Generator</h1>
+        </header>
+
+        <div class="preview-section" id="preview-section">
+            <div class="section-header">
+                <p class="section-title">PREVISUALIZACIÓN</p>
+            </div>
+            <div class="preview-wrapper">
+                 <div id="preview-box" class="contour-preview">
+                     <div class="handle handle-tl" data-handle-advanced="tlh" style="cursor: ew-resize;"></div>
+                     <div class="handle handle-tl" data-handle-advanced="tlv" style="cursor: ns-resize;"></div>
+                     <div class="handle handle-tr" data-handle-advanced="trh" style="cursor: ew-resize;"></div>
+                     <div class="handle handle-tr" data-handle-advanced="trv" style="cursor: ns-resize;"></div>
+                     <div class="handle handle-br" data-handle-advanced="brh" style="cursor: ew-resize;"></div>
+                     <div class="handle handle-br" data-handle-advanced="brv" style="cursor: ns-resize;"></div>
+                     <div class="handle handle-bl" data-handle-advanced="blh" style="cursor: ew-resize;"></div>
+                     <div class="handle handle-bl" data-handle-advanced="blv" style="cursor: ns-resize;"></div>
+                     
+                     <div class="handle" data-handle-simple="top" style="cursor: ew-resize;"></div>
+                     <div class="handle" data-handle-simple="bottom" data-mode-simple="bottom" style="cursor: ew-resize;"></div>
+                     <div class="handle" data-handle-simple="left" data-mode-simple="left" style="cursor: ns-resize;"></div>
+                     <div class="handle" data-handle-simple="right" data-mode-simple="right" style="cursor: ns-resize;"></div>
+                 </div>
+                 <div id="contour-visualizer-overlay"></div>
+            </div>
+        </div>
+        
+        <div class="settings-container" id="contour-settings">
+
+            <div id="design-list-section" class="setting-group" style="border-bottom: 1px solid var(--border-color); padding-bottom: 15px;">
+                 <p class="section-title">PALETA PERSONALIZADA (NO FUNCIONAL)</p>
+                 <div class="design-list" style="height: 40px;"></div>
+            </div>
+
+            <div class="radius-mode-toggle">
+                <button id="mode-advanced" class="layer-visualizer-btn active">Elíptico (8)</button>
+                <button id="mode-simple" class="layer-visualizer-btn">Simétrico (4)</button>
+            </div>
+            
+            <div class="css-output-box setting-group">
+                <code id="css-output" class="css-code">border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;</code>
+                <button id="copy-button" class="layer-visualizer-btn copy-btn">Copiar</button>
+            </div>
+
+
+            <div class="radius-group sliders-advanced" id="radius-group">
+                <p class="section-title">BORDES ELÍPTICOS (8 Radios)</p>
+                <div class="radius-row radius-main-grid"> 
+                    
+                    <div class="radius-input-pair" data-label="Sup. Izq. X">
+                        <div class="input-label">Sup. Izq. X</div>
+                        <input type="number" id="tlh" value="30" min="0" max="100">
+                    </div>
+                    <div class="radius-input-pair" data-label="Sup. Der. X">
+                        <div class="input-label">Sup. Der. X</div>
+                        <input type="number" id="trh" value="70" min="0" max="100">
+                    </div>
+                    <div class="radius-input-pair" data-label="Sup. Izq. Y">
+                        <div class="input-label">Sup. Izq. Y</div>
+                        <input type="number" id="tlv" value="30" min="0" max="100">
+                    </div>
+                    <div class="radius-input-pair" data-label="Sup. Der. Y">
+                        <div class="input-label">Sup. Der. Y</div>
+                        <input type="number" id="trv" value="30" min="0" max="100">
+                    </div>
+                    
+                    <div class="radius-input-pair" data-label="Inf. Izq. X">
+                        <div class="input-label">Inf. Izq. X</div>
+                        <input type="number" id="blh" value="30" min="0" max="100">
+                    </div>
+                    <div class="radius-input-pair" data-label="Inf. Der. X">
+                        <div class="input-label">Inf. Der. X</div>
+                        <input type="number" id="brh" value="70" min="0" max="100">
+                    </div>
+                    <div class="radius-input-pair" data-label="Inf. Izq. Y">
+                        <div class="input-label">Inf. Izq. Y</div>
+                        <input type="number" id="blv" value="70" min="0" max="100">
+                    </div>
+                    <div class="radius-input-pair" data-label="Inf. Der. Y">
+                        <div class="input-label">Inf. Der. Y</div>
+                        <input type="number" id="brv" value="70" min="0" max="100">
+                    </div>
+                </div>
+            </div>
+
+            <div class="radius-group sliders-simple" id="simple-radius-group" style="display: none;">
+                <p class="section-title">BORDES SIMÉTRICOS (4 Radios)</p>
+                <div class="radius-row radius-main-grid"> 
+                    <div class="radius-input-pair" data-label="Superior">
+                        <div class="input-label">Superior</div>
+                        <input type="number" id="simple-top" value="50" min="0" max="100">
+                    </div>
+                    <div class="radius-input-pair" data-label="Inferior">
+                        <div class="input-label">Inferior</div>
+                        <input type="number" id="simple-bottom" value="50" min="0" max="100">
+                    </div>
+                    <div class="radius-input-pair" data-label="Izquierdo">
+                        <div class="input-label">Izquierdo</div>
+                        <input type="number" id="simple-left" value="50" min="0" max="100">
+                    </div>
+                    <div class="radius-input-pair" data-label="Derecho">
+                        <div class="input-label">Derecho</div>
+                        <input type="number" id="simple-right" value="50" min="0" max="100">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="setting-group" style="margin-top: 20px;">
+                <button id="randomize-button" class="layer-visualizer-btn" style="width: 100%; padding: 10px;">¡Sorpréndeme!</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script_manager.js"></script>
+    <script>
+        document.addEventListener('fancyBorderModulesLoaded', () => {
+            if(window.FancyBorderTools && window.FancyBorderTools.initializeApp) {
+                window.FancyBorderTools.initializeApp();
+            } else {
+                 console.error("La inicialización falló. Revisa que los archivos estén en la carpeta 'tools/'.");
+            }
+        });
+    </script>
+</body>
+</html>

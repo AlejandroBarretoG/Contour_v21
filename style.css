@@ -1,0 +1,540 @@
+/* --- Global Styles & Variables --- */
+:root {
+    --purple: #833ab4;
+    --red: #fd1d1d;
+    --red-rgb: 253, 29, 29;
+    --yellow: #fcb045;
+    --border-color: #e0e0e0;
+    --background-color: #f8f9fa;
+    --card-background: #ffffff;
+    --text-primary: #333;
+    --text-secondary: #888;
+    --active-blue: #007bff;
+    --slider-border: #4A5568;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--background-color);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+/* --- ADVERTENCIA PARA NAVEGADORES NO COMPATIBLES --- */
+@supports not (corner-shape: superellipse(0)) {
+  body {
+    all: unset !important;
+  }
+
+  body::before {
+    content: "Tu navegador no soporta la propiedad 'corner-shape', necesaria para la función de Superelipse.";
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: black;
+    background-color: #ffcd33;
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 1rem 0;
+  }
+
+  body > * {
+    display: none !important;
+  }
+}
+
+.section-title {
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+/* --- ESTILOS PARA INDICADORES DE SLIDER (Arreglo Layout Shift) --- */
+.slider-value-display {
+    flex-basis: 45px; /* Ancho fijo para evitar saltos (Layout Shift) */
+    flex-shrink: 0; 
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-primary);
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    padding: 4px 0;
+    line-height: normal; 
+}
+
+
+input[type="number"], input[type="text"], select {
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 6px 8px;
+    font-size: 13px;
+    background-color: var(--card-background);
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+input[type="text"] {
+     text-align: left;
+}
+
+/* CORRECCIÓN: Restringir el estilo de enfoque solo a los tipos de input que lo necesitan. */
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--active-blue);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+/* Remover el estilo de enfoque para los sliders nativos */
+input[type="range"]:focus {
+    outline: none;
+    border-color: initial;
+    box-shadow: none;
+}
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+}
+
+/* --- Main Layout --- */
+.gradient-generator {
+    background-color: var(--card-background);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.preview-section {
+    height: auto; 
+    display: flex;
+    flex-direction: column;
+}
+
+.color-picker-area {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* --- Component Styles --- */
+.settings-container { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 0; /* Se establece el gap a 0 para que setting-row maneje la separación */
+}
+.setting-row { 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    margin-bottom: 12px; /* Añadimos la separación de 12px al dropdown */
+} 
+.setting-row label { 
+    font-size: 13px; 
+    color: var(--text-primary); 
+    flex-basis: 80px; 
+    flex-shrink: 0; 
+}
+/* Estilo para los labels de radio simple */
+.simple-radius-label {
+    font-size: 13px; 
+    color: var(--text-primary); 
+    flex-basis: 80px; 
+    flex-shrink: 0; 
+    text-align: left;
+}
+.setting-row select, .setting-row input { flex-grow: 1; }
+.input-pair-container { display: flex; align-items: center; gap: 4px; } 
+
+.custom-select { position: relative; flex-grow: 1; }
+.custom-select select { -webkit-appearance: none; -moz-appearance: none; appearance: none; padding-right: 30px; }
+.custom-select::after { content: ''; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); border: 5px solid transparent; border-top-color: var(--text-secondary); pointer-events: none; }
+
+#contour-visualizer-overlay { 
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+}
+
+#contour-visualizer-overlay.draggable {
+    pointer-events: auto;
+    cursor: crosshair;
+}
+
+/* --- ESTILOS PARA EL GRUPO DE RADIUS --- */
+.radius-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border: none; 
+    padding: 0 0 12px 0; 
+    border-radius: 6px;
+}
+.radius-group .radius-row {
+     display: grid;
+     grid-template-columns: repeat(2, 1fr); 
+     gap: 16px; 
+     margin-top: 8px; 
+}
+
+/* ESTILOS DE RADIO ELÍPTICO (LABEL AL LADO DEL INPUT) */
+
+/* El grid principal que contiene todos los 4 pares de inputs (2 columnas, 4 filas) */
+#radius-group .radius-main-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 8px 16px; /* 8px vertical entre pares, 16px horizontal entre columnas */
+    margin-top: 0; 
+}
+
+/* El contenedor de un solo par (label + input) */
+.radius-input-pair {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espacio entre el label (Sup. Izq. X) y el input */
+}
+
+/* Ajustamos el input-label para la traducción y la alineación a la derecha */
+.radius-group .input-label {
+    font-size: 13px;
+    color: var(--text-primary);
+    text-align: right; /* Alinear el texto del label a la derecha */
+    flex-basis: 80px; /* Ancho fijo para la etiqueta traducida */
+    flex-shrink: 0;
+    margin-bottom: 0; 
+    text-transform: none;
+}
+.radius-input-pair input[type="number"] {
+    flex-grow: 1; 
+}
+
+
+.radius-separator {
+    height: 1px;
+    background-color: var(--border-color); 
+    margin: 8px 0; /* Ajustado a 8px para igualar el gap vertical */
+    width: 100%;
+    text-align: initial;
+    font-weight: initial;
+    color: initial;
+}
+
+/* --- ESTILOS PARA LA RETÍCULA DE RADIUS --- */
+.radius-grid-overlay {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.2); 
+}
+.grid-cell {
+    /* Las celdas son invisibles pero capturan eventos del mouse */
+    cursor: crosshair;
+    border: 1px dashed rgba(255, 255, 255, 0.4);
+    box-sizing: border-box;
+}
+.grid-cell[data-index="0"],
+.grid-cell[data-index="2"],
+.grid-cell[data-index="6"],
+.grid-cell[data-index="8"],
+.grid-cell[data-index="4"] {
+    /* Destacar las celdas de las esquinas y el centro (puntos de control) */
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* --- ESTILOS DE REFERENCIAS VISUALES (SKETCH) --- */
+.sketch-grid { 
+    position: absolute; 
+    top: 0; left: 0; right: 0; bottom: 0; 
+    pointer-events: none;
+}
+.sketch-grid-line { 
+    position: absolute; 
+    background-color: rgba(255, 255, 255, 0.5); /* Color de referencia */
+    transition: opacity 0.1s; /* Transición para el hover/toggle */
+    opacity: 1;
+}
+.sketch-grid-line.vertical { 
+    width: 2px; 
+    height: 100%; 
+    top: 0; 
+    transform: translateX(-50%); /* Centrar línea */
+}
+.sketch-grid-line.horizontal { 
+    width: 100%; 
+    height: 2px; 
+    left: 0; 
+    transform: translateY(-50%); /* Centrar línea */
+}
+
+/* Los estilos .sketch-point, .angle-line, etc. se mantienen para compatibilidad */
+.sketch-point { position: absolute; width: 10px; height: 10px; border: 2px solid rgba(255, 255, 255, 0.5); background-color: rgba(0, 0, 0, 0.2); border-radius: 50%; transform: translate(-50%, -50%); transition: all 0.2s ease; }
+.sketch-point.active { background-color: white; border-color: white; box-shadow: 0 0 8px rgba(0,0,0,0.5); transform: translate(-50%, -50%) scale(1.2); }
+.angle-line { position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: repeating-linear-gradient(to right, white 0, white 5px, transparent 5px, transparent 10px); transform-origin: center; pointer-events: none; }
+.angle-line::after { content: ''; position: absolute; right: -2px; top: -4px; border: 6px solid transparent; border-left-color: white; }
+#conic-sketch-overlay .sketch-point { top: 50%; left: 50%; }
+#conic-sketch-overlay .angle-line { top: 50%; left: 50%; width: 50%; background: white; transform-origin: left center; }
+#conic-sketch-overlay .angle-line::after { display: none; }
+
+
+.color-picker { width: 100%; min-height: 150px; flex-grow: 1; position: relative; background: linear-gradient(to top, black, transparent), linear-gradient(to right, white, var(--red)); border-radius: 8px; cursor: crosshair; }
+.picker-handle { position: absolute; width: 16px; height: 16px; border: 2px solid white; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.5); transform: translate(-50%, -50%); top: 25%; left: 75%; pointer-events: none; }
+.color-values { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+
+.rgba-inputs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.input-group { display: flex; align-items: center; gap: 8px; }
+.input-group label { font-size: 13px; color: var(--text-primary); flex-shrink: 0; margin-bottom: 0; }
+.input-group input { flex-grow: 1; }
+.hex-container label { text-transform: uppercase; }
+
+/* --- UI Buttons --- */
+.section-header { display: flex; justify-content: space-between; align-items: center; }
+.header-buttons { display: flex; gap: 8px; align-items: center; }
+
+/* ESTILO DEL BOTÓN DE COLOR NATIVO */
+#native-picker-btn { 
+    background: none; 
+    border: none; 
+    padding: 4px; /* Mismo tamaño que el botón de ayuda */
+    cursor: pointer; 
+    line-height: 0; 
+    opacity: 0.8; 
+    transition: opacity 0.2s; 
+    position: relative; 
+}
+#native-picker-btn:hover { 
+    opacity: 1; 
+}
+#native-picker-btn .material-symbols-outlined {
+    font-size: 18px; /* Mismo tamaño que el ícono de ayuda */
+    color: var(--text-primary); 
+    vertical-align: middle;
+}
+#native-picker-btn input[type="color"] {
+     position: absolute; 
+     visibility: hidden; 
+     width: 0; 
+     height: 0;
+}
+/* FIN ESTILO BOTÓN DE COLOR NATIVO */
+
+
+/* ESTILOS DE BOTÓN VISUALIZADOR (layer-visualizer-btn) */
+.layer-visualizer-btn { 
+    padding: 4px; /* Mismo tamaño que el botón de ayuda */
+    border: none; 
+    border-radius: 4px; 
+    background: none; 
+    cursor: pointer; 
+    line-height: 0; 
+    display: flex; 
+    align-items: center; 
+    gap: 0; 
+    color: var(--text-secondary); 
+    transition: all 0.2s ease-in-out; 
+    box-sizing: border-box;
+}
+
+/* Estado de hover */
+.layer-visualizer-btn:hover { 
+    opacity: 1; 
+    background-color: #f0f0f0; 
+}
+
+/* Estado activo del botón */
+.layer-visualizer-btn.active { 
+    opacity: 1; 
+    background-color: var(--active-blue); 
+    border-color: var(--active-blue); 
+    color: white; 
+}
+
+/* Ajustes específicos para el icono */
+.layer-visualizer-btn .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20; 
+    vertical-align: middle;
+    font-size: 18px; /* Mismo tamaño que el ícono de ayuda */
+}
+
+/* Cuando el botón está activo, el icono también debe ser blanco */
+.layer-visualizer-btn.active .material-symbols-outlined {
+    color: white; 
+    fill: 1; 
+}
+/* FIN ESTILOS DEL BOTÓN VISUALIZADOR */
+
+.layer-visualizer-btn.disabled { display: none; }
+
+/* Nuevo estilo para el botón de alternancia de visualizador cuando está inactivo */
+#visualizer-toggle-btn:not(.active) .material-symbols-outlined {
+    color: var(--text-secondary);
+    fill: 0;
+}
+
+/* Help Tooltip Styles */
+.help-tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+.help-tooltip .material-symbols-outlined {
+    font-size: 18px;
+    color: var(--text-secondary);
+}
+.help-tooltip .tooltip-content {
+    visibility: hidden;
+    width: 240px;
+    background-color: #333;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    z-index: 10;
+    bottom: 125%;
+    right: 50%;
+    transform: translateX(50%);
+    opacity: 0;
+    transition: opacity 0.2s;
+    font-size: 12px;
+    line-height: 1.5;
+}
+.help-tooltip .tooltip-content::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+}
+.help-tooltip:hover .tooltip-content {
+    visibility: visible;
+    opacity: 1;
+}
+.tooltip-content b {
+    font-weight: 600;
+}
+.tooltip-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0 0;
+}
+.tooltip-content li {
+    margin-bottom: 5px;
+}
+
+/* --- ESTILOS ESPECÍFICOS PARA CONTOUR DESIGNER --- */
+
+.contour-preview {
+    width: 100%;
+    height: 100%; 
+    background-color: var(--purple);
+    border-radius: 50% / 50%; 
+    position: relative; 
+    overflow: hidden;
+    box-sizing: border-box; 
+    transition: border-radius 0.3s, clip-path 0.3s, corner-shape 0.3s;
+}
+#contour-preview { /* FIX para el ID, aunque usamos contour-preview como clase en el HTML */
+    width: 100%;
+    height: 100%; 
+    background-color: var(--purple);
+    border-radius: 50% / 50%; 
+    position: relative; 
+    overflow: hidden;
+    box-sizing: border-box; 
+    transition: border-radius 0.3s, clip-path 0.3s, corner-shape 0.3s;
+}
+
+
+.preview-wrapper {
+    width: 100%;
+    position: relative;
+    aspect-ratio: 1 / 1;
+}
+
+
+/* NUEVOS ESTILOS PARA LA SECCIÓN DE DISEÑOS */
+.design-section .section-title {
+    margin-bottom: 0; 
+}
+.design-swatch {
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    background-size: cover;
+    background-position: center;
+}
+.design-swatch.active-design {
+    box-shadow: 0 0 0 2px var(--active-blue) !important;
+}
+
+/* --- FIXES VISUALES --- */
+.section-header > .section-title {
+    margin-bottom: 0;
+}
+
+/* ------------------------------------------- */
+/* --- ESTILOS ADICIONALES PARA CONTOUR V19 --- */
+/* ------------------------------------------- */
+
+/* Estilo para el layout del input de radio simple (Contorno Redondeado) */
+#simple-radius-group .input-pair-container {
+    flex-basis: 50%; 
+    display: flex; 
+    align-items: center; 
+    gap: 4px;
+}
+#simple-radius-group .input-pair-container input {
+    flex-grow: 1;
+}
+
+/* Estilos para el Modo Toggle de Radio (Elíptico/Simétrico) */
+.radius-mode-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.radius-mode-toggle .layer-visualizer-btn {
+    flex-grow: 1;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 12px;
+}
+
+/* Estilos de los handles de arrastre en el preview */
+.handle {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: var(--active-blue);
+    border: 2px solid white;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: all;
+    cursor: grab;
+    z-index: 10;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+    transition: background-color 0.1s;
+}
+
+.handle:hover {
+    background-color: white;
+    border-color: var(--active-blue);
+}
